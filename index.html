@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/png" href="./favicon.png">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="description" content="LOVEXHATE — Garment Archive by SHAH WALI.">
+  <title>LOVEXHATE — by SHAH WALI</title>
+
+  <style>
+    :root{--bg:#fff;--fg:#111;--muted:#777;--line:#e5e5e5;--placeholder:#fff}
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;background:var(--bg);color:var(--fg);font-family:Arial,Helvetica,sans-serif;letter-spacing:-.025em}
+    header{height:74px;padding:0 5vw;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10;background:#fff}
+    .logo{font-size:20px;font-weight:800;letter-spacing:-.07em}
+    .by{font-size:11px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase}
+    main{max-width:1600px;margin:auto;padding:7vw 5vw 100px}
+    .hero{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:7vw}
+    h1{font-size:clamp(64px,13vw,190px);line-height:.78;margin:0;letter-spacing:-.1em;font-weight:800}
+    .intro{max-width:220px;color:var(--muted);font-size:12px;line-height:1.5;margin:0 0 4px;text-transform:uppercase}
+    .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:70px 18px}
+    .item{min-width:0}
+    .photo{width:100%;aspect-ratio:1/1;background:#fff!important;overflow:hidden;position:relative;cursor:zoom-in;display:flex;align-items:center;justify-content:center}
+    .photo img{width:100%;height:100%;display:block;object-fit:contain;object-position:center;transition:transform .45s cubic-bezier(.2,.7,.2,1);background:#fff}
+    .item:hover .photo img{transform:scale(1.015)}
+    .placeholder{width:100%;min-height:180px;display:flex;align-items:center;justify-content:center;color:#aaa;font-size:10px;letter-spacing:.12em;text-transform:uppercase}
+    .placeholder span{border:1px solid #111;padding:9px 12px;color:#111}
+    .meta{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;padding-top:12px;min-height:46px;box-sizing:border-box}
+    .name{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.02em;line-height:1.15;color:#111;display:block;min-height:30px;max-width:calc(100% - 32px)}
+    .num{font-size:11px;color:var(--muted);letter-spacing:.08em}
+    footer{border-top:1px solid var(--line);padding:25px 5vw;display:flex;justify-content:space-between;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.08em}
+    @media(max-width:700px){
+      header{height:64px;padding:0 20px}
+      main{padding:55px 20px 70px}
+      .hero{display:block;margin-bottom:55px}
+      .intro{margin-top:28px}
+      .grid{grid-template-columns:1fr;gap:45px 0}
+      .photo{width:100%;aspect-ratio:1/1;}
+      .name{font-size:13px;padding-top:9px;min-height:30px}
+      .logo{font-size:18px}
+    }
+  </style>
+
+<style id="lovexhate-header-style">
+.logo,.by,.monogram-link{
+  width:33.333%;
+  display:flex;
+  align-items:center;
+}
+.logo{justify-content:flex-start;font-size:20px;font-weight:800;letter-spacing:-.07em}
+.monogram-link{justify-content:center;text-decoration:none}
+.by{
+  justify-content:flex-end;
+  font-size:11px;
+  font-weight:900;
+  color:#111;
+  letter-spacing:-.03em;
+}
+.monogram{
+  display:block;
+  height:20px;
+  width:auto;
+  max-width:90px;
+  object-fit:contain;
+}
+.monogram-link:focus-visible{outline:1px solid #111;outline-offset:6px}
+@media(max-width:700px){
+  .monogram{height:17px;max-width:72px}
+  .logo{font-size:18px}
+  .by{font-size:10px}
+}
+</style>
+
+
+<style id="lovexhate-zoom">
+  .zoom-viewer{
+    position:fixed;inset:0;z-index:100;
+    background:#fff;
+    display:none;align-items:center;justify-content:center;
+    padding:32px;
+  }
+  .zoom-viewer.open{display:flex}
+  .zoom-stage{
+    width:min(92vw,1100px);height:min(88vh,900px);
+    background:#fff;overflow:hidden;position:relative;
+    display:flex;align-items:center;justify-content:center;
+    cursor:grab;
+  }
+  .zoom-stage.dragging{cursor:grabbing}
+  .zoom-stage img{
+    max-width:none;max-height:none;width:auto;height:auto;
+    user-select:none;-webkit-user-drag:none;
+    transform-origin:center center;
+  }
+  .zoom-close,.zoom-control{
+    position:fixed;border:1px solid rgba(255,255,255,.35);
+    background:#111;color:#fff;
+    font:700 12px Arial,sans-serif;cursor:pointer;
+    width:42px;height:42px;display:grid;place-items:center;
+  }
+  .zoom-close{top:20px;right:20px;font-size:22px}
+  .zoom-controls{
+    position:fixed;left:50%;bottom:20px;transform:translateX(-50%);
+    display:flex;gap:8px;
+  }
+  .zoom-control{position:static}
+  .zoom-caption{
+    position:fixed;left:20px;bottom:25px;color:#fff;
+    font:700 10px Arial,sans-serif;letter-spacing:.1em;text-transform:uppercase;
+    max-width:50vw;
+  }
+  @media(max-width:700px){
+    .zoom-viewer{padding:14px}
+    .zoom-stage{width:94vw;height:84vh}
+    .zoom-caption{bottom:16px;left:14px}
+    .zoom-controls{bottom:14px}
+  }
+</style>
+
+</head>
+
+<body>
+  <header>
+    <div class="logo">LOVEXHATE</div>
+    <a class="monogram-link" href="#" aria-label="LOVEXHATE home">
+      <img class="monogram" src="./monogram.png" alt="LOVEXHATE monogram">
+    </a>
+    <div class="by">BY SHAH WALI</div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <h1>LOVE<br>X<br>HATE.</h1>
+      <p class="intro">DROPPING SOON</p>
+    </section>
+
+    <section class="grid" id="garment-grid"></section>
+  </main>
+
+
+  <div class="zoom-viewer" id="zoomViewer" aria-hidden="true">
+    <div class="zoom-stage" id="zoomStage">
+      <img id="zoomImage" alt="">
+    </div>
+    <button class="zoom-close" id="zoomClose" aria-label="Close zoom">×</button>
+    <div class="zoom-controls" aria-label="Zoom controls">
+      <button class="zoom-control" id="zoomOut" aria-label="Zoom out">−</button>
+      <button class="zoom-control" id="zoomReset" aria-label="Reset zoom">1:1</button>
+      <button class="zoom-control" id="zoomIn" aria-label="Zoom in">+</button>
+    </div>
+    <div class="zoom-caption" id="zoomCaption"></div>
+  </div>
+
+  <script>
+    const garments = [
+      { file:"01-Widowmaker-Spider-Web-Puffer-Jacket", name:"Widowmaker — Spider Web Puffer Jacket" },
+      { file:"02-Obsidian-Abyss-Asymmetric-Shell-Parka", name:"Obsidian Abyss — Asymmetric Shell Parka" },
+      { file:"03-Feral-Decay-Vest", name:"Feral Decay — Vest" },
+      { file:"04-Nosferatu-Winged-Hoodie", name:"Nosferatu — Winged Hoodie" },
+      { file:"05-Midnight-Crinkle-Boxy-Jacket", name:"Midnight Crinkle — Boxy Jacket" },
+      { file:"06-Restraint-Cargo-Pants", name:"Restraint — Cargo Pants" },
+      { file:"07-Vessel-Grid-Cardigan", name:"Vessel Grid — Cardigan" },
+      { file:"08-Residue-Destroy-Tee", name:"Residue — Destroy Tee" },
+      { file:"09-Phantom-Kimono", name:"Phantom — Kimono" },
+      { file:"10-Null-Minimalist-Vest", name:"Null — Minimalist Vest" },
+      { file:"11-Restraint-Cargo-Pants", name:"Restraint — Cargo Pants" },
+      { file:"12-Vantablack-Fawx-Fur-Jacket", name:"Vantablack — Fawx Fur Jacket" },
+      { file:"13-Banshee-Distressed-Knit-Balaclava", name:"Banshee — Distressed Knit Balaclava" },
+      { file:"14-Grave-Digger-Leather-Bomber", name:"Grave Digger — Leather Bomber" },
+      { file:"15-Shattered-Denim", name:"Shattered — Denim" },
+      { file:"16-Venom-Zip-Seam-Flared-Denim", name:"Venom — Zip Seam Flared Denim" },
+      { file:"17-Void-Puffer", name:"Void — Puffer" },
+      { file:"18-Spectre-Sheer-Lace-Turtleneck", name:"Spectre — Sheer Lace Turtleneck" },
+      { file:"19-Hate-Puffer-Bomber-Jacket", name:"Hate — Puffer Bomber Jacket" },
+      { file:"20-Gargoyle-Collared-Knit-Sweater", name:"Gargoyle — Collared Knit Sweater" },
+      { file:"21-Revenant-Polo-Sweater", name:"Revenant — Polo Sweater" },
+      { file:"22-Coven-Cropped-Lace-Polo", name:"Coven — Cropped Lace Polo" },
+      { file:"23-Hex-Open-Knit-Maxi-Dress", name:"Hex — Open Knit Maxi Dress" },
+      { file:"24-Bramble-Embroidered-Lace-Maxi-Skirt", name:"Bramble — Embroidered Lace Maxi Skirt" },
+      { file:"25-Heartbreak-Embroidered-Half-Zip-Knit", name:"Heartbreak — Embroidered Half Zip Knit" },
+      { file:"26-X-Ray-Rib-Cage-Leather-Jacket", name:"X-Ray — Rib Cage Leather Jacket" }
+    ];
+
+    const grid = document.getElementById("garment-grid");
+
+
+    // Product zoom: click any product image, then zoom with buttons/wheel and drag to inspect.
+    const zoomViewer = document.getElementById("zoomViewer");
+    const zoomStage = document.getElementById("zoomStage");
+    const zoomImage = document.getElementById("zoomImage");
+    const zoomCaption = document.getElementById("zoomCaption");
+    const zoomClose = document.getElementById("zoomClose");
+    const zoomIn = document.getElementById("zoomIn");
+    const zoomOut = document.getElementById("zoomOut");
+    const zoomReset = document.getElementById("zoomReset");
+
+    let zoomScale = 1;
+    let panX = 0, panY = 0;
+    let dragging = false, startX = 0, startY = 0, startPanX = 0, startPanY = 0;
+
+    function renderZoom(){
+      zoomImage.style.transform = `translate(${panX}px, ${panY}px) scale(${zoomScale})`;
+    }
+
+    function resetZoom(){
+      zoomScale = 1; panX = 0; panY = 0; renderZoom();
+    }
+
+    function setZoom(next){
+      const old = zoomScale;
+      zoomScale = Math.max(.5, Math.min(5, next));
+      if (zoomScale === 1) { panX = 0; panY = 0; }
+      renderZoom();
+    }
+
+    function openZoom(src, alt){
+      zoomImage.src = src;
+      zoomImage.alt = alt;
+      zoomCaption.textContent = alt;
+      resetZoom();
+      zoomViewer.classList.add("open");
+      zoomViewer.setAttribute("aria-hidden","false");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeZoom(){
+      zoomViewer.classList.remove("open");
+      zoomViewer.setAttribute("aria-hidden","true");
+      document.body.style.overflow = "";
+    }
+
+    grid.addEventListener("click", function(e){
+      const img = e.target.closest(".photo img");
+      if (!img || img.style.display === "none") return;
+      openZoom(img.src, img.alt);
+    });
+
+    zoomClose.addEventListener("click", closeZoom);
+    zoomIn.addEventListener("click", () => setZoom(zoomScale + .25));
+    zoomOut.addEventListener("click", () => setZoom(zoomScale - .25));
+    zoomReset.addEventListener("click", resetZoom);
+
+    zoomStage.addEventListener("wheel", function(e){
+      e.preventDefault();
+      setZoom(zoomScale + (e.deltaY < 0 ? .2 : -.2));
+    }, {passive:false});
+
+    zoomStage.addEventListener("dblclick", function(){
+      setZoom(zoomScale === 1 ? 2 : 1);
+    });
+
+    zoomStage.addEventListener("pointerdown", function(e){
+      dragging = true;
+      zoomStage.classList.add("dragging");
+      startX = e.clientX; startY = e.clientY;
+      startPanX = panX; startPanY = panY;
+      zoomStage.setPointerCapture(e.pointerId);
+    });
+    zoomStage.addEventListener("pointermove", function(e){
+      if (!dragging) return;
+      panX = startPanX + (e.clientX - startX);
+      panY = startPanY + (e.clientY - startY);
+      renderZoom();
+    });
+    zoomStage.addEventListener("pointerup", function(){
+      dragging = false;
+      zoomStage.classList.remove("dragging");
+    });
+
+    zoomViewer.addEventListener("click", function(e){
+      if (e.target === zoomViewer) closeZoom();
+    });
+    document.addEventListener("keydown", function(e){
+      if (e.key === "Escape") closeZoom();
+      if (e.key === "+" || e.key === "=") setZoom(zoomScale + .25);
+      if (e.key === "-") setZoom(zoomScale - .25);
+      if (e.key === "0") resetZoom();
+    });
+
+
+    garments.forEach((garment, index) => {
+      const number = String(index + 1).padStart(2, "0");
+
+      const item = document.createElement("article");
+      item.className = "item";
+
+      const photo = document.createElement("div");
+      photo.className = "photo";
+
+      const img = document.createElement("img");
+      img.alt = garment.name;
+      img.loading = "eager";
+      img.src = "./images/" + garment.file + ".jpg";
+
+      const placeholder = document.createElement("div");
+      placeholder.className = "placeholder";
+      placeholder.innerHTML = "<span>ADD IMAGE</span>";
+
+      photo.appendChild(placeholder);
+      photo.appendChild(img);
+
+      img.onload = function () {
+        placeholder.style.display = "none";
+        img.style.display = "block";
+      };
+
+      img.onerror = function () {
+        img.style.display = "none";
+        placeholder.style.display = "flex";
+        placeholder.querySelector("span").textContent = "IMAGE NOT FOUND";
+      };
+
+      const meta = document.createElement("div");
+      meta.className = "meta";
+      meta.innerHTML =
+        '<div class="name">' + garment.name + '</div>' +
+        '<div class="num">' + number + '</div>';
+
+      item.appendChild(photo);
+      item.appendChild(meta);
+      grid.appendChild(item);
+    });
+  </script>
+</body>
+</html>
